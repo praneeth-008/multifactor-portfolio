@@ -11,23 +11,23 @@ class factor_portfolio:
     def build(self):
         if self.factor_scores is not None:
             top_stocks = self.factor_scores.sort_values(ascending=False)[:self.top_n]
-        self.weights = pd.series(1/self.top_n , index = top_stocks.index)
+        self.weights = pd.Series(1/self.top_n , index = top_stocks.index)
         return self.weights
 
     def compute_returns(self):
-        if self.weights is not None:
+        if self.weights is None:
             raise ValueError("Portfolio weights not defined. Run build() first.")
-        top_prices = self.prices[self.weigths.index]
+        top_prices = self.prices[self.weights.index]
         returns = top_prices.pct_change().dropna()
         self.portfolio_returns = (returns*self.weights).sum(axis = 1)
         return self.portfolio_returns
 
-    def characterstics(self, rf = 0 , freq = 252):
+    def characteristics(self, rf = 0 , freq = 252):
         if self.portfolio_returns is None:
             raise ValueError("No portfolio returns found. Run compute_returns() first.")
         mean_return = self.portfolio_returns.mean()*freq
-        volatality = self.portfolio_returns.std() * np.sqrt(freq)
-        sharpe = (mean_return-rf)/volatality
+        volatility = self.portfolio_returns.std() * np.sqrt(freq)
+        sharpe = (mean_return-rf)/volatility
 
         cumulative = (1 + self.portfolio_returns).cumprod()
         drawdown = cumulative / cumulative.cummax() - 1

@@ -3,16 +3,17 @@ import numpy as np
 
 class momentum12m:    # momentum is calculated
     def __init__(self, calculated_days = 252, skip_days= 21):# we use the last 252 days to calculate return and skip the last 21 days
-        self.calculated_days = claculated_days
+        self.calculated_days = calculated_days
         self.skip_days = skip_days
 
-    def score(self, price):
-          #computes daily returns using pct_change
-        r252 = (returns + 1).iloc[-self.calculated_days:].prod() - 1 #this calculates the returns of the last 252 days
-        r21 = (returns + 1).iloc[-self.skip_days:].prod() - 1 # calculate the returns of the last 21 days(one month)
+    def score(self, returns):
+        r252 = (returns + 1).iloc[-self.calculated_days:].prod() - 1  #this calculates the returns of the last 252 days
+        r21 = (returns + 1).iloc[-self.skip_days:].prod() - 1  # calculate the returns of the last 21 days(one month)
 
-        momentum = r252 - r21 #(subract them to get clean data)
-        return momentum
+        momentum_score = r252 - r21 # subract them to get clean data
+        momentum_score = momentum_score.dropna()
+
+        return momentum_score.sort_values(ascending=False)
 
 
 class value:   # to find the value of a company we use pe ratio
@@ -51,16 +52,17 @@ class quality:
         return quality_score.sort_values(ascending=False)
 
 
-class volatality:
+class volatility:
     def __init__(self, calculated_days = 252): # we define days to calculate volatilty for the last one year
         self.calculated_days = calculated_days
 
-    def score(self, price):
+    def score(self,returns):
+        recent_returns = returns.iloc[-self.calculated_days:]
 
-        returns = price.pct_change().dropna() #calculates returns
-        volatility = returns.std()  # volatility is standard  deviation of returns
+        volatility = recent_returns.std()  # volatility is standard  deviation of returns
         annual_volatility = volatility * np.sqrt(self.calculated_days) # we anualize the volatility
         vol_score = 1/annual_volatility #taking inverse as lower is better
+        vol_score = vol_score.dropna()
         return vol_score.sort_values(ascending=False)
 
 class size:

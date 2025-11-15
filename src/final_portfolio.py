@@ -8,7 +8,7 @@ def combine_factor_returns(factor_returns: dict, factor_weights: dict, normalize
         w = w / w.sum()
     final_returns = (factor_rets_df * w).sum(axis=1)
     return final_returns
-def evaluate_portfolio(r: pd.Series, rf: float = 0.0, freq: int = 12) -> dict:
+def evaluate_portfolio(r: pd.Series, rf: float = 0.0, freq: int = 0) -> dict:
     r = r.dropna()
     mu = r.mean() * freq
     vol = r.std() * np.sqrt(freq)
