@@ -1,22 +1,53 @@
-# Factor-Based Portfolio Optimization
-
-This project implements a multi-factor equity portfolio construction framework.
-Individual equity factors are computed from price and fundamental data, used to
-construct single-factor portfolios, and then combined into a multi-factor
-portfolio. Mean–variance optimization is applied at the factor level to improve
-risk-adjusted performance.
-
----
-
-## Project Architecture
+## System Architecture
 
 ```mermaid
-flowchart LR
-    A[Price & Fundamental Data] --> B[Factor Models]
-    B --> C[Factor Scores]
-    C --> D[Single-Factor Portfolios]
-    D --> E[Factor Return Series]
-    E --> F[Mean-Variance Optimizer]
-    F --> G[Optimized Factor Weights]
-    G --> H[Final Multi-Factor Portfolio]
-    H --> I[Performance Evaluation]
+flowchart TB
+
+    subgraph Data["Data Layer"]
+        A1[Price Data]
+        A2[Fundamental Data]
+    end
+
+    subgraph Factors["Factor Layer"]
+        B1[Momentum]
+        B2[Value]
+        B3[Quality]
+        B4[Low Volatility]
+        B5[Size]
+        B6[ESG]
+    end
+
+    subgraph Portfolios["Portfolio Construction"]
+        C1[Single-Factor Portfolios]
+        C2[Factor Return Series]
+    end
+
+    subgraph Optimization["Optimization Layer"]
+        D1[Mean-Variance Optimizer]
+        D2[Optimized Factor Weights]
+    end
+
+    subgraph Final["Final Output"]
+        E1[Multi-Factor Portfolio]
+        E2[Performance Evaluation]
+    end
+
+    A1 --> B1
+    A1 --> B4
+    A2 --> B2
+    A2 --> B3
+    A2 --> B5
+    A2 --> B6
+
+    B1 --> C1
+    B2 --> C1
+    B3 --> C1
+    B4 --> C1
+    B5 --> C1
+    B6 --> C1
+
+    C1 --> C2
+    C2 --> D1
+    D1 --> D2
+    D2 --> E1
+    E1 --> E2
