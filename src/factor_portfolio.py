@@ -8,10 +8,12 @@ class factor_portfolio:
         self.factor_scores = factor_scores
         self.top_n = top_n
         self.weights = weights
+        self.portfolio_returns = None  # Initialize to avoid AttributeError
     def build(self):
-        if self.factor_scores is not None:
-            top_stocks = self.factor_scores.sort_values(ascending=False)[:self.top_n]
-        self.weights = pd.Series(1/self.top_n , index = top_stocks.index)
+        if self.factor_scores is None:
+            raise ValueError("Factor scores not provided. Cannot build portfolio.")
+        top_stocks = self.factor_scores.sort_values(ascending=False)[:self.top_n]
+        self.weights = pd.Series(1/self.top_n, index=top_stocks.index)
         return self.weights
 
     def compute_returns(self):

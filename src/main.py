@@ -10,8 +10,6 @@ fundamentals.columns = fundamentals.columns.str.strip()
 fundamentals["Ticker"] = fundamentals["Ticker"].str.split().str[0]
 fundamentals = fundamentals.set_index("Ticker")
 fundamentals.index = fundamentals.index.str.replace("/", "-", regex=False)
-# using the above line because our data was downloaded from bloomberg as since we are using yfinace to get prices
-# we need to replace these values for y finance to understand a few tickers 'BRK/B', 'BF/B' both these tickers specifically
 
 tickers = fundamentals.index.tolist()
 prices, returns = download_prices(tickers)
