@@ -20,6 +20,15 @@ flowchart LR
     F --> G[Optimized Factor Weights]
     G --> H[Final Multi-Factor Portfolio]
     H --> I[Performance Evaluation]
+
+---
+
+### 🔹 File Structure (block 2)
+
+```markdown
+## File Structure
+
+```mermaid
 flowchart TD
     A[multifactor-portfolio]
 
